@@ -1,0 +1,117 @@
+#! /usr/bin/env ruby
+
+require 'optparse'
+require 'xml-write-stream'
+require 'yaml'
+
+$options = {}
+
+option_parser = OptionParser.new do |opts|
+  opts.banner = "Usage: yaml2tmx [options]"
+
+  opts.on('-s', '--source [file]', 'YAML file containing phrases in the source locale.') do |source|
+    $options[:source] = source
+  end
+
+  opts.on('-t', '--target [file]', 'YAML file containing translations in the target locale.') do |target|
+    $options[:target] = target
+  end
+
+  opts.on('-o', '--output [file]', 'The TMX output file to write. If not specified, output is printed to stdout.') do |output|
+    $options[:output] = output
+  end
+
+  opts.on('-h', '--help', 'Prints this help message.') do
+    puts opts
+    exit
+  end
+end
+
+option_parser.parse!
+
+# load source and target phrases
+source_phrases = YAML.load_file($options[:source])
+target_phrases = YAML.load_file($options[:target])
+
+source_locale = source_phrases.keys.first
+target_locale = target_phrases.keys.first
+
+source_phrases = source_phrases[source_locale]
+target_phrases = target_phrases[target_locale]
+
+def each_phrase(phrases, path, &block)
+  case phrases
+    when Hash
+      phrases.each_pair do |key, value|
+        each_phrase(value, path + [key], &block)
+      end
+
+    when Array
+      phrases.each_with_index do |element, idx|
+        each_phrase(element, path + [idx], &block)
+      end
+
+    when String
+      yield phrases, path
+  end
+end
+
+# correlate source and target phrases
+trans_map = {}
+
+phrase_count = 0
+
+each_phrase(source_phrases, []) do |phrase, path|
+  phrase_count += 1
+
+  translation = path.inject(:start) do |ret, seg|
+    if ret == :start
+      target_phrases[seg]
+    elsif ret
+      if seg.is_a?(Numeric) && ret.is_a?(Array)
+        ret[seg]  # array index case
+      elsif seg.is_a?(String) && ret.is_a?(Hash)
+        ret[seg]  # hash key case
+      end
+    end
+  end
+
+  trans_map[phrase] = translation if translation
+end
+
+STDERR.write("Matched #{trans_map.size} of #{phrase_count} source phrases\n")
+
+stream = if $options[:output]
+  File.open($options[:output], 'w+')
+else
+  STDOUT
+end
+
+writer = XmlWriteStream.from_stream(stream)
+writer.open_tag('tmx', version: '1.4')
+writer.open_single_line_tag('header', srclang: source_locale, datatype: 'plaintext', segtype: 'paragraph')
+writer.close_tag
+
+writer.open_tag('body')
+
+trans_map.each_pair do |source_phrase, target_phrase|
+  writer.open_tag('tu')
+  writer.open_tag('tuv', 'xml:lang' => source_locale)
+  writer.open_single_line_tag('seg')
+  writer.write_text(source_phrase)
+  writer.close_tag  # seg
+  writer.close_tag  # tuv
+
+  writer.open_tag('tuv', 'xml:lang' => target_locale)
+  writer.open_single_line_tag('seg')
+  writer.write_text(target_phrase)
+  writer.close_tag  # seg
+  writer.close_tag  # tuv
+  writer.close_tag  # tu
+end
+
+writer.close
+
+if $options[:output]
+  STDERR.write("Wrote #{$options[:output]}\n")
+end
