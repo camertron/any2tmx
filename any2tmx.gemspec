@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
 
   s.executables << 'yaml2tmx'
   s.executables << 'json2tmx'
+  s.executables << 'android2tmx'
 
   s.require_path = 'lib'
   s.files = Dir["{lib,spec}/**/*", "Gemfile", "History.txt", "README.md", "Rakefile", "any2tmx.gemspec"]
