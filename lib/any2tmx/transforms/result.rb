@@ -11,7 +11,7 @@ module Any2Tmx
       end
 
       def source_phrase_count
-        source.traversable.collection.size
+        source.traversable.size
       end
 
       def write(io)

@@ -14,6 +14,10 @@ module Any2Tmx
       end
     end
 
+    def size
+      each_entry.inject(0) { |ret, _| ret + 1 }
+    end
+
     def dig(path)
       path.inject(:start) do |ret, seg|
         if ret == :start
