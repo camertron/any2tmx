@@ -1,3 +1,3 @@
-module Yaml2Tmx
+module Any2Tmx
   VERSION = '1.0.0'
 end

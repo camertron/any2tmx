@@ -1,9 +1,9 @@
 #! /usr/bin/env ruby
 
 require 'any2tmx'
-require 'yaml'
+require 'json'
 
-options = Any2Tmx::Options.new('yaml2tmx')
+options = Any2Tmx::Options.new('json2tmx')
 
 unless options.valid?
   puts options.errors.first
@@ -16,12 +16,7 @@ if options.help?
 end
 
 def load(file, locale)
-  phrases = YAML.load_file(file)
-
-  if phrases.include?(locale)
-    phrases = phrases[locale]
-  end
-
+  phrases = JSON.parse(File.read(file))
   traversable = Any2Tmx::Traversable.new(phrases)
   Any2Tmx::PhraseSet.new(traversable, locale)
 end

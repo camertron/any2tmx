@@ -1,5 +1,8 @@
 source 'http://rubygems.org'
 
-gem 'rake'
-
 gemspec
+
+group :development, :test do
+  gem 'rake'
+  gem 'pry-nav'
+end
