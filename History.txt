@@ -1,3 +1,8 @@
 == 1.0.0
 
 * Birthday!
+
+== 1.0.0
+
+* Renamed gem from yaml2tmx to any2tmx.
+* Added support for JSON and Android XML.
