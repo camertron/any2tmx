@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.version  = ::Any2Tmx::VERSION
   s.authors  = ["Cameron Dutro"]
   s.email    = ["camertron@gmail.com"]
-  s.homepage = "http://github.com/camertron"
+  s.homepage = "http://github.com/camertron/any2tmx"
 
   s.description = s.summary = "A command-line tool to convert certain file types to the standard TMX format for translation memories."
 
