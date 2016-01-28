@@ -1,7 +1,6 @@
 #! /usr/bin/env ruby
 
 require 'any2tmx'
-require 'yaml'
 
 options = Any2Tmx::Options.new('yaml2tmx')
 
@@ -15,26 +14,10 @@ if options.help?
   exit 0
 end
 
-def load(file, locale)
-  phrases = YAML.load_file(file)
+transform = Any2Tmx::Transforms::YamlTransform.new(options)
+result = transform.result
 
-  if phrases.include?(locale)
-    phrases = phrases[locale]
-  end
-
-  traversable = Any2Tmx::Traversable.new(phrases)
-  Any2Tmx::PhraseSet.new(traversable, locale)
-end
-
-# load source and target phrases
-source = load(options.source, options.source_locale)
-target = load(options.target, options.target_locale)
-
-# correlate source and target phrases
-phrase_count = 0
-trans_map = source.zip(target) { phrase_count += 1 }
-
-STDERR.write("Matched #{trans_map.size} of #{phrase_count} source phrases\n")
+STDERR.write("Matched #{result.processed_count} of #{result.source_phrase_count} source phrases\n")
 
 stream = if options.output
   File.open(options.output, 'w+')
@@ -42,9 +25,7 @@ else
   STDOUT
 end
 
-Any2Tmx::TmxWriter.write(
-  trans_map, source.locale, target.locale, stream
-)
+result.write(stream)
 
 if options.output
   STDERR.write("Wrote #{options.output}\n")

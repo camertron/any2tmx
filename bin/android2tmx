@@ -2,7 +2,7 @@
 
 require 'any2tmx'
 
-options = Any2Tmx::Options.new('json2tmx')
+options = Any2Tmx::Options.new('android2tmx')
 
 unless options.valid?
   puts options.errors.first
@@ -14,7 +14,7 @@ if options.help?
   exit 0
 end
 
-transform = Any2Tmx::Transforms::JsonTransform.new(options)
+transform = Any2Tmx::Transforms::AndroidTransform.new(options)
 result = transform.result
 
 STDERR.write("Matched #{result.processed_count} of #{result.source_phrase_count} source phrases\n")

@@ -14,6 +14,9 @@ Gem::Specification.new do |s|
   s.has_rdoc = true
 
   s.add_dependency 'xml-write-stream', '~> 1.0'
+  s.add_dependency 'nokogiri', '~> 1.6'
+  s.add_dependency 'htmlentities', '~> 4.3'
+
   s.executables << 'yaml2tmx'
   s.executables << 'json2tmx'
 
