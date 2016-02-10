@@ -10,3 +10,7 @@
 == 1.0.1
 
 * Add ability to load files by name or by contents.
+
+== 1.0.2
+
+* Fix Android transform bug

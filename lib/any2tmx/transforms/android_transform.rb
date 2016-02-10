@@ -5,12 +5,12 @@ module Any2Tmx
 
       def load_file(file, locale)
         phrases = File.read(file)
-        load(contents, locale)
+        load(phrases, locale)
       end
 
       def load(contents, locale)
         contents = Any2Tmx::AndroidXmlParser.parse(contents)
-        traversable = Any2Tmx::Traversable.new(phrases)
+        traversable = Any2Tmx::Traversable.new(contents)
         Any2Tmx::PhraseSet.new(traversable, locale)
       end
     end
