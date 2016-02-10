@@ -3,8 +3,13 @@ module Any2Tmx
     class AndroidTransform < Transform
       private
 
-      def load(file, locale)
-        phrases = Any2Tmx::AndroidXmlParser.parse(File.read(file))
+      def load_file(file, locale)
+        phrases = File.read(file)
+        load(contents, locale)
+      end
+
+      def load(contents, locale)
+        contents = Any2Tmx::AndroidXmlParser.parse(contents)
         traversable = Any2Tmx::Traversable.new(phrases)
         Any2Tmx::PhraseSet.new(traversable, locale)
       end

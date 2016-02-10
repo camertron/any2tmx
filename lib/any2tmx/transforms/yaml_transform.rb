@@ -5,14 +5,19 @@ module Any2Tmx
     class YamlTransform < Transform
       private
 
-      def load(file, locale)
-        phrases = YAML.load_file(file)
+      def load_file(file, locale)
+        phrases = File.read(file)
+        load(phrases, locale)
+      end
 
-        if phrases.include?(locale)
-          phrases = phrases[locale]
+      def load(contents, locale)
+        contents = YAML.load(contents)
+
+        if contents.include?(locale)
+          contents = contents[locale]
         end
 
-        traversable = Any2Tmx::Traversable.new(phrases)
+        traversable = Any2Tmx::Traversable.new(contents)
         Any2Tmx::PhraseSet.new(traversable, locale)
       end
     end

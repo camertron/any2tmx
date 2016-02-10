@@ -6,3 +6,7 @@
 
 * Renamed gem from yaml2tmx to any2tmx.
 * Added support for JSON and Android XML.
+
+== 1.0.1
+
+* Add ability to load files by name or by contents.

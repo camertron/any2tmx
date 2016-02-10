@@ -5,9 +5,13 @@ module Any2Tmx
     class JsonTransform < Transform
       private
 
-      def load(file, locale)
-        phrases = JSON.parse(File.read(file))
-        traversable = Any2Tmx::Traversable.new(phrases)
+      def load_file(file, locale)
+        phrases = File.read(file)
+        load(phrases)
+      end
+
+      def load(contents, locale)
+        traversable = Any2Tmx::Traversable.new(JSON.parse(contents))
         Any2Tmx::PhraseSet.new(traversable, locale)
       end
     end
