@@ -14,10 +14,8 @@ if options.help?
   exit 0
 end
 
-transform = Any2Tmx::Transforms::YamlTransform.new(options)
-result = transform.result
-
-STDERR.write("Matched #{result.processed_count} of #{result.source_phrase_count} source phrases\n")
+transformer = Any2Tmx::Transformer.new(options)
+result = transformer.transform
 
 stream = if options.output
   File.open(options.output, 'w+')
@@ -25,7 +23,7 @@ else
   STDOUT
 end
 
-result.write(stream)
+Any2Tmx::TmxWriter.write(result, options, stream)
 
 if options.output
   STDERR.write("Wrote #{options.output}\n")

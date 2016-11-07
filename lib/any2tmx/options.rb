@@ -5,7 +5,7 @@ module Any2Tmx
     attr_reader :errors
 
     def initialize(executable_name)
-      @options = {}
+      @options = { targets: [] }
       @errors = []
 
       OptionParser.new do |opts|
@@ -13,14 +13,12 @@ module Any2Tmx
 
         opts.on('-s', '--source [file]:[locale]', 'File containing phrases in the source locale (locale appended with colon).') do |source|
           file, locale = source.split(':')
-          @options[:source] = file
-          @options[:source_locale] = locale
+          @options[:source] = { file: file, locale: locale }
         end
 
         opts.on('-t', '--target [file]:[locale]', 'File containing translations in the target locale (locale appended with colon).') do |target|
           file, locale = target.split(':')
-          @options[:target] = file
-          @options[:target_locale] = locale
+          @options[:targets] << { file: file, locale: locale }
         end
 
         opts.on('-o', '--output [file]', 'The TMX output file to write. If not specified, output is printed to stdout.') do |output|
@@ -48,16 +46,8 @@ module Any2Tmx
       @options[:source]
     end
 
-    def target
-      @options[:target]
-    end
-
-    def source_locale
-      @options[:source_locale]
-    end
-
-    def target_locale
-      @options[:target_locale]
+    def targets
+      @options[:targets]
     end
 
     def output
@@ -85,34 +75,36 @@ module Any2Tmx
       unless help?
         before_validate
         validate_source
-        validate_target
+        validate_targets
         validate_output
         after_validate
       end
     end
 
     def validate_source
-      unless File.exist?(source)
+      unless File.exist?(source[:file])
         errors << 'Source file does not exist.'
       end
 
-      unless source_locale
+      unless source[:locale]
         errors << 'Source locale not provided. Try running with the -h option for usage details.'
       end
     end
 
-    def validate_target
-      unless File.exist?(target)
-        errors << 'Target file does not exist.'
-      end
+    def validate_targets
+      targets.each do |target|
+        unless File.exist?(target[:file])
+          errors << 'Target file does not exist.'
+        end
 
-      unless target_locale
-        errors << 'Target locale not provided. Try running with the -h option for usage details.'
+        unless target[:locale]
+          errors << 'Target locale not provided. Try running with the -h option for usage details.'
+        end
       end
     end
 
     def validate_output
-      unless File.exist?(File.dirname(target))
+      if output && !File.exist?(File.dirname(output))
         errors << 'Output path does not exist.'
       end
     end

@@ -1,16 +1,27 @@
-== 1.0.0
+== 1.1.0
 
-* Birthday!
+* Depend on Abroad for parsing, which removes a lot of code.
+* General cleanup and refactoring.
+* Added ability to specify more than one target file.
 
-== 1.0.0
+== 1.0.4
 
-* Renamed gem from yaml2tmx to any2tmx.
-* Added support for JSON and Android XML.
+* Fixing bug with JSON processor causing crash.
+
+== 1.0.3
+
+* Stringify keys when processing YAML
+
+== 1.0.2
+
+* Fix Android transform bug
 
 == 1.0.1
 
 * Add ability to load files by name or by contents.
 
-== 1.0.2
+== 1.0.0
 
-* Fix Android transform bug
+* Birthday!
+* Renamed gem from yaml2tmx to any2tmx.
+* Added support for JSON and Android XML.
