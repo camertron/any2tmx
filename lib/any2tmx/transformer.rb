@@ -5,7 +5,8 @@ module Any2Tmx
     EXTRACTOR_EXTENSIONS = {
       '.yml'  => 'yaml/rails',
       '.json' => 'json/key-value',
-      '.xml'  => 'android/xml'
+      '.xml'  => 'android/xml',
+      '.txt'  => 'txt/lines'
     }
 
     attr_reader :options

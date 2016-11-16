@@ -2,7 +2,7 @@
 
 require 'any2tmx'
 
-options = Any2Tmx::Options.new('android2tmx')
+options = Any2Tmx::Options.new('any2tmx')
 
 unless options.valid?
   puts options.errors.first
@@ -14,7 +14,7 @@ if options.help?
   exit 0
 end
 
-transform = Any2Tmx::Transformer.new(options)
+transformer = Any2Tmx::Transformer.new(options)
 result = transformer.transform
 
 stream = if options.output

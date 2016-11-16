@@ -83,7 +83,7 @@ module Any2Tmx
 
     def validate_source
       unless File.exist?(source[:file])
-        errors << 'Source file does not exist.'
+        errors << "Source file #{source[:file]} does not exist."
       end
 
       unless source[:locale]
@@ -94,7 +94,7 @@ module Any2Tmx
     def validate_targets
       targets.each do |target|
         unless File.exist?(target[:file])
-          errors << 'Target file does not exist.'
+          errors << "Target file #{target[:file]} does not exist."
         end
 
         unless target[:locale]

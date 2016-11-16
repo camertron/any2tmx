@@ -1,3 +1,8 @@
+== 2.0.0
+
+* Add support for txt files.
+* Remove individual executables (yaml2tmx, json2tmx, etc) in favor of a single executable (any2tmx).
+
 == 1.1.0
 
 * Depend on Abroad for parsing, which removes a lot of code.

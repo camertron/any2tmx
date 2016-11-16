@@ -17,9 +17,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'nokogiri', '~> 1.6'
   s.add_dependency 'xml-write-stream', '~> 1.0'
 
-  s.executables << 'android2tmx'
-  s.executables << 'json2tmx'
-  s.executables << 'yaml2tmx'
+  s.executables << 'any2tmx'
 
   s.require_path = 'lib'
   s.files = Dir["{lib,spec}/**/*", 'Gemfile', 'History.txt', 'README.md', 'Rakefile', 'any2tmx.gemspec']
